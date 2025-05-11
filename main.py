@@ -8,17 +8,20 @@ import string
 
 app = FastAPI()
 
-# Mount static and template directories
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# Pydantic model for input validation
 class InputData(BaseModel):
     data: List[str]  # Expects format: {"data": ["M", "1", ...]}
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/bfhl")
+async def get_operation_code():
+    return {"operation_code": 1}
+
 
 @app.post("/process")
 async def process_text(input_data: InputData):
