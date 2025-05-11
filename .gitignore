@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+
+# Editor configs
+.vscode/
+*.swp
+
+# OS-specific
+.DS_Store
+
+# Logs or temp files
+*.log

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Separator</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+
+</head>
+<body>
+    <h1>Character Separator</h1>
+    
+    <form id="inputForm" class="input-section">
+        <textarea id="userInput" name="input_data" placeholder='Enter JSON like {"data": ["M", "1", "334", "4", "B", "Z", "а", "b"]}' required></textarea>
+        <button type="submit" id="submitBtn">Submit</button>
+    </form>
+    
+    <div class="display-container">
+        <div class="display-box">
+            <h2>Alphabets</h2>
+            <div id="alphabets" class="content"></div>
+        </div>
+        
+        <div class="display-box">
+            <h2>Numbers</h2>
+            <div id="numbers" class="content"></div>
+        </div>
+        
+        <div class="display-box">
+            <h2>Lowercase Alphabet with highest value</h2>
+            <div id="highestAlpha" class="content"></div>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('inputForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const inputText = document.getElementById('userInput').value;
+        
+        try {
+            const response = await fetch('/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(JSON.parse(inputText))
+            });
+
+            if (!response.ok) {
+                throw new Error('Invalid response from server');
+            }
+
+            const result = await response.json();
+
+            // Display results
+            document.getElementById('alphabets').textContent = result.alphabets.join(', ');
+            document.getElementById('numbers').textContent = result.numbers.join(', ');
+            document.getElementById('highestAlpha').textContent =
+                result.highest_alpha || 'No lowercase alphabets found';
+
+        } catch (error) {
+            alert('Error: Invalid JSON input');
+            console.error(error);
+        }
+    });
+</script>
+
+</body>
+</html>
